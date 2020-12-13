@@ -1,7 +1,8 @@
-name: "my-blog"
+name: "Randhir Bilkhu"
 title: "Randhir Bilkhu"
 description: |
-  Randhir Bilkhu
+  R, Python & data science 
+base_url:
 output_dir: "_site"
 navbar:
   right:
@@ -9,4 +10,11 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
+    - icon: fa fa-github
+      href: https://github.com/RandhirBilkhu
+    - icon: fa fa-linkedin
+      href: https://www.linkedin.com/in/rbilkhu/
+    - icon: fa fa-twitter
+      href: https://twitter.com/randhirbilkhu 
+
 output: distill::distill_article

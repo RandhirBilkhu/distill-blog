@@ -1,0 +1,42 @@
+---
+title: "eltcat"
+description: |
+  First version of catr released on github     
+preview: hurr.jpg
+author:
+  - name: Randhir Bilkhu
+date: 11-20-2020
+categories:
+  - R
+  - packages
+  - catr
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+First version of catr released on [github](https://github.com/RandhirBilkhu/catr)! 
+
+My goal with this package is to create functions which are helpful to analysing Catastrophe model outputs particularly in a re-insurance context. 
+
+Intial documentation can be found [here](https://randhirbilkhu.github.io/catr/).
+
+This first release is intended to be a foundation upon which to build. I have a pipeline of features to be added but would welcome ideas for development.
+
+Please feel free to raise an issue [here](https://github.com/RandhirBilkhu/catr/issues)
+
+### Release Notes 0.1.0
+
+* `create_elt` transforms a raw elt into a object with beta distribution parameters for secondary uncertainty
+
+* `create_ylt` runs a monte carlo simulation assuming a poisson distribution for primary uncertainty
+
+* `create_oep_curve` calculates exceedance probability and returns the occurrence loss at specified return periods
+
+* `layer_loss` calculates limited loss to layer
+

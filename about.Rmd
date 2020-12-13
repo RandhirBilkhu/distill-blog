@@ -1,9 +1,10 @@
 ---
-title: "About this blog"
+title: "About"
 description: |
-  Some additional details about the blog
+  My personal blog about R, Python and data science
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+

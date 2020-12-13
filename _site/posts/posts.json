@@ -1,19 +1,40 @@
 [
   {
-    "path": "posts/welcome/",
-    "title": "Welcome to Randhir Bilkhu",
-    "description": "Welcome to our new blog, Randhir Bilkhu. We hope you enjoy \nreading what we have to say!",
+    "path": "posts/2020-12-13-testing-collapse/",
+    "title": "Testing Collapse",
+    "description": "An exercise to benchmark data manipulation speed using the collapse package benchmarked against data.table, dplyr and pandas",
     "author": [
       {
-        "name": "Nora Jones",
-        "url": "https://example.com/norajones"
+        "name": "Randhir Bilkhu",
+        "url": {}
       }
     ],
     "date": "2020-12-13",
     "categories": [],
-    "contents": "\r\n\r\n\r\n\r\n",
+    "contents": "\r\nTODO\r\n\r\n\r\n\r\n",
     "preview": {},
-    "last_modified": "2020-12-13T17:30:13+00:00",
+    "last_modified": "2020-12-13T22:17:18+00:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2020-12-13-eltcat/",
+    "title": "eltcat",
+    "description": "First version of catr released on github",
+    "author": [
+      {
+        "name": "Randhir Bilkhu",
+        "url": {}
+      }
+    ],
+    "date": "2020-11-20",
+    "categories": [
+      "R",
+      "packages",
+      "catr"
+    ],
+    "contents": "\r\nFirst version of catr released on github!\r\nMy goal with this package is to create functions which are helpful to analysing Catastrophe model outputs particularly in a re-insurance context.\r\nIntial documentation can be found here.\r\nThis first release is intended to be a foundation upon which to build. I have a pipeline of features to be added but would welcome ideas for development.\r\nPlease feel free to raise an issue here\r\nRelease Notes 0.1.0\r\ncreate_elt transforms a raw elt into a object with beta distribution parameters for secondary uncertainty\r\ncreate_ylt runs a monte carlo simulation assuming a poisson distribution for primary uncertainty\r\ncreate_oep_curve calculates exceedance probability and returns the occurrence loss at specified return periods\r\nlayer_loss calculates limited loss to layer\r\n\r\n\r\n\r\n",
+    "preview": "posts/2020-12-13-eltcat/hurr.jpg",
+    "last_modified": "2020-12-13T18:09:55+00:00",
     "input_file": {}
   }
 ]

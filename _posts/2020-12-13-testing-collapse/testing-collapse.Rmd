@@ -1,0 +1,23 @@
+---
+title: "Testing Collapse"
+description: |
+  An exercise to benchmark data manipulation speed using the collapse package benchmarked against data.table, dplyr and pandas
+author:
+  - name: Randhir Bilkhu
+    url: {}
+date: 12-13-2020
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+TODO
+
+
+
+
