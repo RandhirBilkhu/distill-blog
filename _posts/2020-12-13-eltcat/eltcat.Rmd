@@ -1,7 +1,7 @@
 ---
-title: "eltcat"
+title: "eltr"
 description: |
-  First version of catr released on github     
+  a package to help analyse outputs from catastrophe models in a reinsurance context   
 preview: hurr.jpg
 author:
   - name: Randhir Bilkhu
@@ -9,7 +9,6 @@ date: 11-20-2020
 categories:
   - R
   - packages
-  - catr
 output:
   distill::distill_article:
     self_contained: false
@@ -20,7 +19,7 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-First version of catr released on [github](https://github.com/RandhirBilkhu/catr)! 
+First version of eltr released on [github](https://github.com/RandhirBilkhu/catr)! 
 
 My goal with this package is to create functions which are helpful to analysing Catastrophe model outputs particularly in a re-insurance context. 
 

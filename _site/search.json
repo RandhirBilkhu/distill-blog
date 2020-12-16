@@ -6,14 +6,14 @@
       "description": "My personal blog about R, Python and data science",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2020-12-13T22:19:58+00:00"
+      "last_modified": "2020-12-16T10:11:37+00:00"
     },
     {
       "path": "index.html",
       "title": "Posts",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2020-12-13T22:20:00+00:00"
+      "last_modified": "2020-12-16T10:11:38+00:00"
     }
   ],
   "collections": ["posts/posts.json"]

@@ -1,23 +1,290 @@
 ---
-title: "Testing Collapse"
+title: "data manipulation using collapse"
 description: |
-  An exercise to benchmark data manipulation speed using the collapse package benchmarked against data.table, dplyr and pandas
+  An introduction to the collapse R package, testing and benchmarking some common data manipulation tasks against data.table and dplyr
+preview: sven-brandsma-OdF1YWzW_vA-unsplash.jpg
 author:
   - name: Randhir Bilkhu
-    url: {}
 date: 12-13-2020
+categories:
+  - R
+  - packages
 output:
   distill::distill_article:
+    toc: true
+    toc_depth: 3
     self_contained: false
 ---
 
-
-```{r setup, include=FALSE}
+```{r setup, include=TRUE, warning =FALSE}
+library(reticulate)
+library(cowplot)
+library(tidyverse)
+library(microbenchmark)
+library(data.table)  # Default for this machine is 2 threads
+plot_benchmark <- function (object, ..., log = TRUE, y_max = 1.05 * max(object$time)) 
+{
+    if (!requireNamespace("ggplot2")) 
+        stop("Missing package 'ggplot2'.")
+    y_min <- 0
+    object$ntime <- microbenchmark:::convert_to_unit(object$time, "t")
+    plt <- ggplot2::ggplot(object, ggplot2::aes_string(x = "expr", 
+        y = "ntime"))
+    plt <- plt + ggplot2::coord_cartesian(ylim = c(y_min, y_max))
+    plt <- plt + ggplot2::geom_boxplot()
+    plt <- plt + ggplot2::scale_x_discrete(name = "")
+    y_label <- sprintf("Time [%s]", attr(object$ntime, 
+        "unit"))
+    plt <- if (log) {
+        plt + ggplot2::scale_y_log10(name = y_label)
+    }
+    else {
+        plt + ggplot2::scale_y_continuous(name = y_label)
+    }
+    plt <- plt + ggplot2::coord_flip()
+    plt + theme_minimal_hgrid(12)
+}
+ 
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-TODO
+I recently came across [collapse](https://sebkrantz.github.io/collapse/) which is a C/C++ based package for data transformation and statistical computing in R. It offers a lot of functionality for statistical programming and time series analysis, and integrates well with the two main packages used for data manipulation in R, `dplyr` and `data.table`.
+
+My focus in this post will be just to look at some basic data manipulation operations such as subsetting, recoding variables, de-duplicating and aggregating data to calculate summary statistics. 
+
+I've written this primarily as a self-learning aid and I am sure there will likely be better ways to perform the operations or other features of `collapse` that are worth investigating. Corrections and suggestions would be welcome.
 
 
+### Create a dummy dataset
+
+First thing to do is to create a sample dataset so that we can test out the functions.
+
+```{r,echo=TRUE}
+library(data.table)
+set.seed(1)
+
+test_data <- data.table( ID = 1:10e6,
+                  values = sample(100:1000, size = 50, replace = TRUE),
+                  Code = sample(LETTERS[1:4], 10e6, replace = TRUE),
+                  City = rep(c("Tokyo","Berlin","Denver","Stockholm"), 10e6))
+setkey(test_data, City)
+```
+
+As collapse is geared towards efficiency of operation I thought it best to use a fairly large dataset - this dataset has 40 million records.
+
+```{r}
+
+str(test_data)
+
+```
+
+### Summarising Data
+
+A very common task is to group data by some categorical feature and then summarise it. Here I calculate the mean value for each city using the `fmean` function.
+
+```{r,echo=TRUE}
+collapse::fmean(x= test_data$values, g= test_data$City)
+```
+
+We can compare the performance of this function against a data.table and dplyr way of doing the same thing. The box plot below shows the results *(please see the side note on Microbenchmark for details of how to produce this chart)*
+
+data.table is on average the best performing but collapse does provide some improvement on dplyr's group by. 
+
+```{r, cache=TRUE,echo=TRUE}
+
+mb <-microbenchmark (  
+        collapse  = collapse::fmean( x= test_data$values, g= test_data$City),
+        datatable = test_data[, .SD[,mean(values)]  , by=City],
+        dplyr     = test_data %>% dplyr::group_by(City) %>%  dplyr::summarize(mean(values)),
+        
+        times=100)
+
+plot_benchmark(mb)
+```
+
+### Subsetting data
+
+Subsetting or filtering the data based on some criteria is also a really common task. Here I used the `fsubset` function to filter the data only where the Code is equal to A.
+
+```{r, cache=TRUE,echo=TRUE}
+collapse::fsubset(test_data, Code =="A")
+```
+
+Again we can compare against data.table and dplyr - here data.table wins hands down, but collapse offers a significant improvement on dplyr.
+
+```{r, cache=TRUE,echo=TRUE}
+
+mb2 <- microbenchmark(
+   collapse = collapse::fsubset(test_data, Code =="A"),
+   datatable = test_data[Code=="A",],
+   dplyr = test_data %>% dplyr::filter(Code=="A"),
+   times=10
+
+)
+
+plot_benchmark(mb2)
+```
+
+### Deduplication
+
+Sometimes it is necessary to select only the unique values in a dataset. Collapse provides the 'funique' function which allows you to specify which  columns are to be used for identifying unique rows in the dataset.
+
+Here I used `fselect` to select the City and Code columns and then `funique` to return the unique combinations of City and Code. 
+
+```{r, cache=TRUE,echo=TRUE}
+test_data %>% fselect(City, Code) %>% funique()
+```
+
+
+
+```{r,cache=TRUE,echo=TRUE}
+library(collapse)
+
+mb3 <- microbenchmark(
+  collapse = test_data %>% fselect(City, Code) %>% funique(),
+  datatable = unique(test_data[, .(City, Code)]),
+  dplyr =  test_data %>% dplyr::select(City, Code) %>% dplyr::distinct(),
+  times=10
+)
+
+plot_benchmark(mb3)
+
+```
+
+Collapse seems to be significantly better here.
+
+### Converting data types
+
+collapse offers a whole range of substitute functions for converting matrices, dataframes etc, Here I look at the converting a character vector to a factor.
+
+
+```{r, cache=TRUE,echo=TRUE}
+f1 <- collapse::qF(test_data$City)
+#you could replace f1 with test_data$City to recode the factor in the dataframe itself.
+str(f1)
+```
+
+ 
+I compared this against the base method of doing this using `as.factor`. Collapse offers a siginificant performance improvement here over the base function.
+
+```{r, cache=TRUE,echo=TRUE}
+
+mb4 <- microbenchmark(
+  collapse = collapse::qF(test_data$City),
+  base = as.factor(test_data$City),
+  times=10
+  )
+plot_benchmark(mb4)
+
+```
+
+In practice I commonly use `as.factor` inside a data.table and use lapply to convert multiple fields. `qF` incorporates well in the same way. `collapse` provides a
+whole suite of re-coding functions (e.g. replacing NAs and Infs) which I think would be easy to incorporate with `data.table` or `dplyr` and clearly offer an improved level of performance.
+
+
+```{r, cache=TRUE,echo=TRUE}
+mb5 <- microbenchmark(
+   datatable_plus_base= test_data[, lapply(.SD, as.factor) , .SDcols = c("City", "Code")],
+   datatable_plus_collapse = test_data[, lapply(.SD, collapse::qF) , .SDcols = c("City", "Code")],
+   times=10
+
+)
+
+plot_benchmark(mb5)
+
+```
+
+
+### Conclusion
+
+I think `collapse` is a great package with a whole array of functions which could be useful to improve the performance of data manipulation tasks, although in my opinion I would still rely on data.table/dplyr as the primary go to's for handling data. 
+
+One thing I really like about `collapse` is that the `%>%` is incorporated and it integrates well with both dplyr and data.table. It might be a good option for those not familiar with data.table who want an improved performance.
+
+I have only touched the surface here as `collapse` offers a lot of additional statistical functionality which could be very useful especially when analysing financial data.
+
+I don't think `collapse` will replace `dplyr` or `data.table` but I guess it's not about either/or but about taking the best parts of every package and using them to improve your code. It's definitely a package worth further investigation which I plan to do by trying out more of the functions and incorporating them into my workflow.
+
+
+#### Side Note on Microbenchmark
+
+Throughout this post I used the microbenchmark package to compare the performance of each operation. One of the aspects of microbenchmark I really like is that it comes with a default method to provide plot outputs of the results. This is in the form of a ggplot object which creates a violin plot.
+
+However, I'm not really a fan of the violin plots and wanted to change the default to a box plot. microbenchmark.autoplot is a S3 method which can easily be amended by using `getS3method` to return the underlying function and then modifying. Here I changed `ggplot2::stat_ydensity()` to `ggplot2::geom_boxplot()`. 
+
+This [post](https://stackoverflow.com/questions/24451575/what-does-autoplot-microbenchmark-actually-plot) on Stack overflow was very helpful.
+
+
+```{r,echo=TRUE, results="hide"}
+#getS3method("autoplot", "microbenchmark")
+
+function (object, ..., log = TRUE, y_max = 1.05 * max(object$time)) 
+{
+    if (!requireNamespace("ggplot2")) 
+        stop("Missing package 'ggplot2'.")
+    y_min <- 0
+    object$ntime <- convert_to_unit(object$time, "t")
+    plt <- ggplot2::ggplot(object, ggplot2::aes_string(x = "expr", 
+        y = "ntime"))
+    plt <- plt + ggplot2::coord_cartesian(ylim = c(y_min, y_max))
+    plt <- plt + ggplot2::stat_ydensity()
+    plt <- plt + ggplot2::scale_x_discrete(name = "")
+    y_label <- sprintf("Time [%s]", attr(object$ntime, 
+        "unit"))
+    plt <- if (log) {
+        plt + ggplot2::scale_y_log10(name = y_label)
+    }
+    else {
+        plt + ggplot2::scale_y_continuous(name = y_label)
+    }
+    plt <- plt + ggplot2::coord_flip()
+    plt
+}
+
+# I changetd ggplot2::stat_ydensity() to geom_boxplot plus flipped the axees
+plot_benchmark <- function (object, ..., log = TRUE, y_max = 1.05 * max(object$time)) 
+{
+    if (!requireNamespace("ggplot2")) 
+        stop("Missing package 'ggplot2'.")
+    y_min <- 0
+    object$ntime <- microbenchmark:::convert_to_unit(object$time, "t")
+    plt <- ggplot2::ggplot(object, ggplot2::aes_string(x = "expr", 
+        y = "ntime"))
+    plt <- plt + ggplot2::coord_cartesian(ylim = c(y_min, y_max))
+    plt <- plt + ggplot2::geom_boxplot()
+    plt <- plt + ggplot2::scale_x_discrete(name = "")
+    y_label <- sprintf("Time [%s]", attr(object$ntime, 
+        "unit"))
+    plt <- if (log) {
+        plt + ggplot2::scale_y_log10(name = y_label)
+    }
+    else {
+        plt + ggplot2::scale_y_continuous(name = y_label)
+    }
+    plt <- plt + ggplot2::coord_flip()
+    plt + theme_minimal_hgrid(12)
+}
+```
+
+
+```{r,echo=FALSE}
+plot_grid( autoplot(mb5), plot_benchmark(mb5))
+```
+
+
+
+### Session Info
+
+ setting  value                       
+ version  R version 3.6.3 (2020-02-29)
+ os       Windows 10 x64              
+ system   x86_64, mingw32             
+ ui       RStudio                     
+ language en_US.utf8 
+ 
+* dplyr_1.0.2 
+* collapse_1.4.2  
+* data.table_1.13.0 
+ 
 
 

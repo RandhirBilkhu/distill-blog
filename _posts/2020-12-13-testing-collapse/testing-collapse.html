@@ -86,9 +86,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-  <title>Testing Collapse</title>
+  <title>data manipulation using collapse</title>
   
-  <meta property="description" itemprop="description" content="An exercise to benchmark data manipulation speed using the collapse package benchmarked against data.table, dplyr and pandas"/>
+  <meta property="description" itemprop="description" content="An introduction to the collapse R package, testing and benchmarking some common data manipulation tasks against data.table and dplyr"/>
   
   
   <!--  https://schema.org/Article -->
@@ -97,26 +97,26 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <meta name="article:author" content="Randhir Bilkhu"/>
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Testing Collapse"/>
+  <meta property="og:title" content="data manipulation using collapse"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="An exercise to benchmark data manipulation speed using the collapse package benchmarked against data.table, dplyr and pandas"/>
+  <meta property="og:description" content="An introduction to the collapse R package, testing and benchmarking some common data manipulation tasks against data.table and dplyr"/>
   <meta property="og:locale" content="en_US"/>
   
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Testing Collapse"/>
-  <meta property="twitter:description" content="An exercise to benchmark data manipulation speed using the collapse package benchmarked against data.table, dplyr and pandas"/>
+  <meta property="twitter:title" content="data manipulation using collapse"/>
+  <meta property="twitter:description" content="An introduction to the collapse R package, testing and benchmarking some common data manipulation tasks against data.table and dplyr"/>
   
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Testing Collapse"]},{"type":"character","attributes":{},"value":["An exercise to benchmark data manipulation speed using the collapse package benchmarked against data.table, dplyr and pandas\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Randhir Bilkhu"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["12-13-2020"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","preview","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["data manipulation using collapse"]},{"type":"character","attributes":{},"value":["An introduction to the collapse R package, testing and benchmarking some common data manipulation tasks against data.table and dplyr\n"]},{"type":"character","attributes":{},"value":["sven-brandsma-OdF1YWzW_vA-unsplash.jpg"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Randhir Bilkhu"]}]}]},{"type":"character","attributes":{},"value":["12-13-2020"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth","self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[3]},{"type":"logical","attributes":{},"value":[false]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"NULL"}
+  {"type":"character","attributes":{},"value":["sven-brandsma-OdF1YWzW_vA-unsplash.jpg","testing-collapse_files/anchor-4.2.2/anchor.min.js","testing-collapse_files/bowser-1.9.3/bowser.min.js","testing-collapse_files/distill-2.2.21/template.v2.js","testing-collapse_files/figure-html5/unnamed-chunk-10-1.png","testing-collapse_files/figure-html5/unnamed-chunk-11-1.png","testing-collapse_files/figure-html5/unnamed-chunk-12-1.png","testing-collapse_files/figure-html5/unnamed-chunk-13-1.png","testing-collapse_files/figure-html5/unnamed-chunk-4-1.png","testing-collapse_files/figure-html5/unnamed-chunk-6-1.png","testing-collapse_files/figure-html5/unnamed-chunk-8-1.png","testing-collapse_files/jquery-1.11.3/jquery.min.js","testing-collapse_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1420,7 +1420,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Testing Collapse","description":"An exercise to benchmark data manipulation speed using the collapse package benchmarked against data.table, dplyr and pandas","authors":[{"author":"Randhir Bilkhu","authorURL":{},"affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2020-12-13T00:00:00.000+00:00","citationText":"Bilkhu, 2020"}
+{"title":"data manipulation using collapse","description":"An introduction to the collapse R package, testing and benchmarking some common data manipulation tasks against data.table and dplyr","authors":[{"author":"Randhir Bilkhu","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2020-12-13T00:00:00.000+00:00","citationText":"Bilkhu, 2020"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1430,21 +1430,286 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Testing Collapse</h1>
+<h1>data manipulation using collapse</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p><p>An exercise to benchmark data manipulation speed using the collapse package benchmarked against data.table, dplyr and pandas</p></p>
+<p><p>An introduction to the collapse R package, testing and benchmarking some common data manipulation tasks against data.table and dplyr</p></p>
 </div>
 
 <div class="d-byline">
-  Randhir Bilkhu true 
+  Randhir Bilkhu  
   
 <br/>12-13-2020
 </div>
 
 <div class="d-article">
-<p>TODO</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#create-a-dummy-dataset">Create a dummy dataset</a></li>
+<li><a href="#summarising-data">Summarising Data</a></li>
+<li><a href="#subsetting-data">Subsetting data</a></li>
+<li><a href="#deduplication">Deduplication</a></li>
+<li><a href="#converting-data-types">Converting data types</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#session-info">Session Info</a></li>
+</ul>
+</nav>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<p>I recently came across <a href="https://sebkrantz.github.io/collapse/">collapse</a> which is a C/C++ based package for data transformation and statistical computing in R. It offers a lot of functionality for statistical programming and time series analysis, and integrates well with the two main packages used for data manipulation in R, <code>dplyr</code> and <code>data.table</code>.</p>
+<p>My focus in this post will be just to look at some basic data manipulation operations such as subsetting, recoding variables, de-duplicating and aggregating data to calculate summary statistics.</p>
+<p>I’ve written this primarily as a self-learning aid and I am sure there will likely be better ways to perform the operations or other features of <code>collapse</code> that are worth investigating. Corrections and suggestions would be welcome.</p>
+<h3 id="create-a-dummy-dataset">Create a dummy dataset</h3>
+<p>First thing to do is to create a sample dataset so that we can test out the functions.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre><code><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://r-datatable.com'>data.table</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
+
+<span class='va'>test_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span> ID <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10e6</span>,
+                  values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>:</span><span class='fl'>1000</span>, size <span class='op'>=</span> <span class='fl'>50</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+                  Code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, <span class='fl'>10e6</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+                  City <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Tokyo"</span>,<span class='st'>"Berlin"</span>,<span class='st'>"Denver"</span>,<span class='st'>"Stockholm"</span><span class='op'>)</span>, <span class='fl'>10e6</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/setkey.html'>setkey</a></span><span class='op'>(</span><span class='va'>test_data</span>, <span class='va'>City</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>As collapse is geared towards efficiency of operation I thought it best to use a fairly large dataset - this dataset has 40 million records.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre><code>Classes &#39;data.table&#39; and &#39;data.frame&#39;:  40000000 obs. of  4 variables:
+ $ ID    : int  2 6 10 14 18 22 26 30 34 38 ...
+ $ values: int  778 398 696 429 824 977 973 951 521 605 ...
+ $ Code  : chr  &quot;C&quot; &quot;D&quot; &quot;B&quot; &quot;A&quot; ...
+ $ City  : chr  &quot;Berlin&quot; &quot;Berlin&quot; &quot;Berlin&quot; &quot;Berlin&quot; ...
+ - attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt; 
+ - attr(*, &quot;sorted&quot;)= chr &quot;City&quot;</code></pre>
+</div>
+<h3 id="summarising-data">Summarising Data</h3>
+<p>A very common task is to group data by some categorical feature and then summarise it. Here I calculate the mean value for each city using the <code>fmean</code> function.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre><code><span class='fu'>collapse</span><span class='fu'>::</span><span class='fu'><a href='https://sebkrantz.github.io/collapse/reference/fmean.html'>fmean</a></span><span class='op'>(</span>x<span class='op'>=</span> <span class='va'>test_data</span><span class='op'>$</span><span class='va'>values</span>, g<span class='op'>=</span> <span class='va'>test_data</span><span class='op'>$</span><span class='va'>City</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>   Berlin    Denver Stockholm     Tokyo 
+   633.56    546.44    633.56    546.44 </code></pre>
+</div>
+<p>We can compare the performance of this function against a data.table and dplyr way of doing the same thing. The box plot below shows the results <em>(please see the side note on Microbenchmark for details of how to produce this chart)</em></p>
+<p>data.table is on average the best performing but collapse does provide some improvement on dplyr’s group by.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre><code><span class='va'>mb</span> <span class='op'>&lt;-</span><span class='fu'>microbenchmark</span> <span class='op'>(</span>  
+        collapse  <span class='op'>=</span> <span class='fu'>collapse</span><span class='fu'>::</span><span class='fu'><a href='https://sebkrantz.github.io/collapse/reference/fmean.html'>fmean</a></span><span class='op'>(</span> x<span class='op'>=</span> <span class='va'>test_data</span><span class='op'>$</span><span class='va'>values</span>, g<span class='op'>=</span> <span class='va'>test_data</span><span class='op'>$</span><span class='va'>City</span><span class='op'>)</span>,
+        datatable <span class='op'>=</span> <span class='va'>test_data</span><span class='op'>[</span>, <span class='va'>.SD</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span><span class='op'>]</span>  , by<span class='op'>=</span><span class='va'>City</span><span class='op'>]</span>,
+        dplyr     <span class='op'>=</span> <span class='va'>test_data</span> <span class='op'>%&gt;%</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>City</span><span class='op'>)</span> <span class='op'>%&gt;%</span>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span><span class='op'>)</span>,
+        
+        times<span class='op'>=</span><span class='fl'>100</span><span class='op'>)</span>
+
+<span class='fu'>plot_benchmark</span><span class='op'>(</span><span class='va'>mb</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="testing-collapse_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+</div>
+<h3 id="subsetting-data">Subsetting data</h3>
+<p>Subsetting or filtering the data based on some criteria is also a really common task. Here I used the <code>fsubset</code> function to filter the data only where the Code is equal to A.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre><code><span class='fu'>collapse</span><span class='fu'>::</span><span class='fu'><a href='https://sebkrantz.github.io/collapse/reference/fsubset.html'>fsubset</a></span><span class='op'>(</span><span class='va'>test_data</span>, <span class='va'>Code</span> <span class='op'>==</span><span class='st'>"A"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>               ID values Code   City
+       1:      14    429    A Berlin
+       2:      26    973    A Berlin
+       3:      30    951    A Berlin
+       4:      38    605    A Berlin
+       5:      46    636    A Berlin
+      ---                           
+10002424: 9999877    481    A  Tokyo
+10002425: 9999897    474    A  Tokyo
+10002426: 9999941    442    A  Tokyo
+10002427: 9999945    783    A  Tokyo
+10002428: 9999953    228    A  Tokyo</code></pre>
+</div>
+<p>Again we can compare against data.table and dplyr - here data.table wins hands down, but collapse offers a significant improvement on dplyr.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre><code><span class='va'>mb2</span> <span class='op'>&lt;-</span> <span class='fu'>microbenchmark</span><span class='op'>(</span>
+   collapse <span class='op'>=</span> <span class='fu'>collapse</span><span class='fu'>::</span><span class='fu'><a href='https://sebkrantz.github.io/collapse/reference/fsubset.html'>fsubset</a></span><span class='op'>(</span><span class='va'>test_data</span>, <span class='va'>Code</span> <span class='op'>==</span><span class='st'>"A"</span><span class='op'>)</span>,
+   datatable <span class='op'>=</span> <span class='va'>test_data</span><span class='op'>[</span><span class='va'>Code</span><span class='op'>==</span><span class='st'>"A"</span>,<span class='op'>]</span>,
+   dplyr <span class='op'>=</span> <span class='va'>test_data</span> <span class='op'>%&gt;%</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>Code</span><span class='op'>==</span><span class='st'>"A"</span><span class='op'>)</span>,
+   times<span class='op'>=</span><span class='fl'>10</span>
+
+<span class='op'>)</span>
+
+<span class='fu'>plot_benchmark</span><span class='op'>(</span><span class='va'>mb2</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="testing-collapse_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+</div>
+<h3 id="deduplication">Deduplication</h3>
+<p>Sometimes it is necessary to select only the unique values in a dataset. Collapse provides the ‘funique’ function which allows you to specify which columns are to be used for identifying unique rows in the dataset.</p>
+<p>Here I used <code>fselect</code> to select the City and Code columns and then <code>funique</code> to return the unique combinations of City and Code.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre><code><span class='va'>test_data</span> <span class='op'>%&gt;%</span> <span class='fu'>fselect</span><span class='op'>(</span><span class='va'>City</span>, <span class='va'>Code</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>funique</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>         City Code
+ 1:    Berlin    C
+ 2:    Berlin    D
+ 3:    Berlin    B
+ 4:    Berlin    A
+ 5:    Denver    B
+ 6:    Denver    C
+ 7:    Denver    D
+ 8:    Denver    A
+ 9: Stockholm    B
+10: Stockholm    C
+11: Stockholm    A
+12: Stockholm    D
+13:     Tokyo    C
+14:     Tokyo    D
+15:     Tokyo    A
+16:     Tokyo    B</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre><code><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://sebkrantz.github.io/collapse/'>collapse</a></span><span class='op'>)</span>
+
+<span class='va'>mb3</span> <span class='op'>&lt;-</span> <span class='fu'>microbenchmark</span><span class='op'>(</span>
+  collapse <span class='op'>=</span> <span class='va'>test_data</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://sebkrantz.github.io/collapse/reference/select_replace_vars.html'>fselect</a></span><span class='op'>(</span><span class='va'>City</span>, <span class='va'>Code</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://sebkrantz.github.io/collapse/reference/funique.html'>funique</a></span><span class='op'>(</span><span class='op'>)</span>,
+  datatable <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/duplicated.html'>unique</a></span><span class='op'>(</span><span class='va'>test_data</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>City</span>, <span class='va'>Code</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>,
+  dplyr <span class='op'>=</span>  <span class='va'>test_data</span> <span class='op'>%&gt;%</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>City</span>, <span class='va'>Code</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span><span class='op'>(</span><span class='op'>)</span>,
+  times<span class='op'>=</span><span class='fl'>10</span>
+<span class='op'>)</span>
+
+<span class='fu'>plot_benchmark</span><span class='op'>(</span><span class='va'>mb3</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="testing-collapse_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+</div>
+<p>Collapse seems to be significantly better here.</p>
+<h3 id="converting-data-types">Converting data types</h3>
+<p>collapse offers a whole range of substitute functions for converting matrices, dataframes etc, Here I look at the converting a character vector to a factor.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre><code><span class='va'>f1</span> <span class='op'>&lt;-</span> <span class='fu'>collapse</span><span class='fu'>::</span><span class='fu'><a href='https://sebkrantz.github.io/collapse/reference/qF.html'>qF</a></span><span class='op'>(</span><span class='va'>test_data</span><span class='op'>$</span><span class='va'>City</span><span class='op'>)</span>
+<span class='co'>#you could replace f1 with test_data$City to recode the factor in the dataframe itself.</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>f1</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code> Factor w/ 4 levels &quot;Berlin&quot;,&quot;Denver&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+</div>
+<p>I compared this against the base method of doing this using <code>as.factor</code>. Collapse offers a siginificant performance improvement here over the base function.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre><code><span class='va'>mb4</span> <span class='op'>&lt;-</span> <span class='fu'>microbenchmark</span><span class='op'>(</span>
+  collapse <span class='op'>=</span> <span class='fu'>collapse</span><span class='fu'>::</span><span class='fu'><a href='https://sebkrantz.github.io/collapse/reference/qF.html'>qF</a></span><span class='op'>(</span><span class='va'>test_data</span><span class='op'>$</span><span class='va'>City</span><span class='op'>)</span>,
+  base <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>test_data</span><span class='op'>$</span><span class='va'>City</span><span class='op'>)</span>,
+  times<span class='op'>=</span><span class='fl'>10</span>
+  <span class='op'>)</span>
+<span class='fu'>plot_benchmark</span><span class='op'>(</span><span class='va'>mb4</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="testing-collapse_files/figure-html5/unnamed-chunk-10-1.png" width="624" /></p>
+</div>
+<p>In practice I commonly use <code>as.factor</code> inside a data.table and use lapply to convert multiple fields. <code>qF</code> incorporates well in the same way. <code>collapse</code> provides a whole suite of re-coding functions (e.g. replacing NAs and Infs) which I think would be easy to incorporate with <code>data.table</code> or <code>dplyr</code> and clearly offer an improved level of performance.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre><code><span class='va'>mb5</span> <span class='op'>&lt;-</span> <span class='fu'>microbenchmark</span><span class='op'>(</span>
+   datatable_plus_base<span class='op'>=</span> <span class='va'>test_data</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>.SD</span>, <span class='va'>as.factor</span><span class='op'>)</span> , .SDcols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"City"</span>, <span class='st'>"Code"</span><span class='op'>)</span><span class='op'>]</span>,
+   datatable_plus_collapse <span class='op'>=</span> <span class='va'>test_data</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>.SD</span>, <span class='fu'>collapse</span><span class='fu'>::</span><span class='va'><a href='https://sebkrantz.github.io/collapse/reference/qF.html'>qF</a></span><span class='op'>)</span> , .SDcols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"City"</span>, <span class='st'>"Code"</span><span class='op'>)</span><span class='op'>]</span>,
+   times<span class='op'>=</span><span class='fl'>10</span>
+
+<span class='op'>)</span>
+
+<span class='fu'>plot_benchmark</span><span class='op'>(</span><span class='va'>mb5</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="testing-collapse_files/figure-html5/unnamed-chunk-11-1.png" width="624" /></p>
+</div>
+<h3 id="conclusion">Conclusion</h3>
+<p>I think <code>collapse</code> is a great package with a whole array of functions which could be useful to improve the performance of data manipulation tasks, although in my opinion I would still rely on data.table/dplyr as the primary go to’s for handling data.</p>
+<p>One thing I really like about <code>collapse</code> is that the <code>%&gt;%</code> is incorporated and it integrates well with both dplyr and data.table. It might be a good option for those not familiar with data.table who want an improved performance.</p>
+<p>I have only touched the surface here as <code>collapse</code> offers a lot of additional statistical functionality which could be very useful especially when analysing financial data.</p>
+<p>I don’t think <code>collapse</code> will replace <code>dplyr</code> or <code>data.table</code> but I guess it’s not about either/or but about taking the best parts of every package and using them to improve your code. It’s definitely a package worth further investigation which I plan to do by trying out more of the functions and incorporating them into my workflow.</p>
+<h4 id="side-note-on-microbenchmark">Side Note on Microbenchmark</h4>
+<p>Throughout this post I used the microbenchmark package to compare the performance of each operation. One of the aspects of microbenchmark I really like is that it comes with a default method to provide plot outputs of the results. This is in the form of a ggplot object which creates a violin plot.</p>
+<p>However, I’m not really a fan of the violin plots and wanted to change the default to a box plot. microbenchmark.autoplot is a S3 method which can easily be amended by using <code>getS3method</code> to return the underlying function and then modifying. Here I changed <code>ggplot2::stat_ydensity()</code> to <code>ggplot2::geom_boxplot()</code>.</p>
+<p>This <a href="https://stackoverflow.com/questions/24451575/what-does-autoplot-microbenchmark-actually-plot">post</a> on Stack overflow was very helpful.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre><code><span class='co'>#getS3method("autoplot", "microbenchmark")</span>
+
+<span class='kw'>function</span> <span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span>, <span class='va'>log</span> <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>y_max</span> <span class='op'>=</span> <span class='fl'>1.05</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>$</span><span class='va'>time</span><span class='op'>)</span><span class='op'>)</span> 
+<span class='op'>{</span>
+    <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"ggplot2"</span><span class='op'>)</span><span class='op'>)</span> 
+        <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"Missing package 'ggplot2'."</span><span class='op'>)</span>
+    <span class='va'>y_min</span> <span class='op'>&lt;-</span> <span class='fl'>0</span>
+    <span class='va'>object</span><span class='op'>$</span><span class='va'>ntime</span> <span class='op'>&lt;-</span> <span class='fu'>convert_to_unit</span><span class='op'>(</span><span class='va'>object</span><span class='op'>$</span><span class='va'>time</span>, <span class='st'>"t"</span><span class='op'>)</span>
+    <span class='va'>plt</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes_.html'>aes_string</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"expr"</span>, 
+        y <span class='op'>=</span> <span class='st'>"ntime"</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='va'>plt</span> <span class='op'>&lt;-</span> <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='op'>(</span>ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>y_min</span>, <span class='va'>y_max</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='va'>plt</span> <span class='op'>&lt;-</span> <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_violin.html'>stat_ydensity</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='va'>plt</span> <span class='op'>&lt;-</span> <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_discrete.html'>scale_x_discrete</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span>
+    <span class='va'>y_label</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span><span class='op'>(</span><span class='st'>"Time [%s]"</span>, <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>$</span><span class='va'>ntime</span>, 
+        <span class='st'>"unit"</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='va'>plt</span> <span class='op'>&lt;-</span> <span class='kw'>if</span> <span class='op'>(</span><span class='va'>log</span><span class='op'>)</span> <span class='op'>{</span>
+        <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_log10</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='va'>y_label</span><span class='op'>)</span>
+    <span class='op'>}</span>
+    <span class='kw'>else</span> <span class='op'>{</span>
+        <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_continuous</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='va'>y_label</span><span class='op'>)</span>
+    <span class='op'>}</span>
+    <span class='va'>plt</span> <span class='op'>&lt;-</span> <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='va'>plt</span>
+<span class='op'>}</span>
+
+<span class='co'># I changetd ggplot2::stat_ydensity() to geom_boxplot plus flipped the axees</span>
+<span class='va'>plot_benchmark</span> <span class='op'>&lt;-</span> <span class='kw'>function</span> <span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span>, <span class='va'>log</span> <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>y_max</span> <span class='op'>=</span> <span class='fl'>1.05</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>$</span><span class='va'>time</span><span class='op'>)</span><span class='op'>)</span> 
+<span class='op'>{</span>
+    <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"ggplot2"</span><span class='op'>)</span><span class='op'>)</span> 
+        <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"Missing package 'ggplot2'."</span><span class='op'>)</span>
+    <span class='va'>y_min</span> <span class='op'>&lt;-</span> <span class='fl'>0</span>
+    <span class='va'>object</span><span class='op'>$</span><span class='va'>ntime</span> <span class='op'>&lt;-</span> <span class='fu'>microbenchmark</span><span class='fu'>:::</span><span class='fu'><a href='https://rdrr.io/pkg/microbenchmark/man/convert_to_unit.html'>convert_to_unit</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>$</span><span class='va'>time</span>, <span class='st'>"t"</span><span class='op'>)</span>
+    <span class='va'>plt</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes_.html'>aes_string</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"expr"</span>, 
+        y <span class='op'>=</span> <span class='st'>"ntime"</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='va'>plt</span> <span class='op'>&lt;-</span> <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='op'>(</span>ylim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>y_min</span>, <span class='va'>y_max</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='va'>plt</span> <span class='op'>&lt;-</span> <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='va'>plt</span> <span class='op'>&lt;-</span> <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_discrete.html'>scale_x_discrete</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span>
+    <span class='va'>y_label</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span><span class='op'>(</span><span class='st'>"Time [%s]"</span>, <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>$</span><span class='va'>ntime</span>, 
+        <span class='st'>"unit"</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='va'>plt</span> <span class='op'>&lt;-</span> <span class='kw'>if</span> <span class='op'>(</span><span class='va'>log</span><span class='op'>)</span> <span class='op'>{</span>
+        <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_log10</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='va'>y_label</span><span class='op'>)</span>
+    <span class='op'>}</span>
+    <span class='kw'>else</span> <span class='op'>{</span>
+        <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_continuous</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='va'>y_label</span><span class='op'>)</span>
+    <span class='op'>}</span>
+    <span class='va'>plt</span> <span class='op'>&lt;-</span> <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='va'>plt</span> <span class='op'>+</span> <span class='fu'>theme_minimal_hgrid</span><span class='op'>(</span><span class='fl'>12</span><span class='op'>)</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="testing-collapse_files/figure-html5/unnamed-chunk-13-1.png" width="624" /></p>
+</div>
+<h3 id="session-info">Session Info</h3>
+<p>setting value<br />
+version R version 3.6.3 (2020-02-29) os Windows 10 x64<br />
+system x86_64, mingw32<br />
+ui RStudio<br />
+language en_US.utf8</p>
+<ul>
+<li>dplyr_1.0.2</li>
+<li>collapse_1.4.2<br />
+</li>
+<li>data.table_1.13.0</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
