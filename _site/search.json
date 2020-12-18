@@ -1,0 +1,20 @@
+{
+  "articles": [
+    {
+      "path": "about.html",
+      "title": "About",
+      "description": "My personal blog about R, Python and data science",
+      "author": [],
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2020-12-18T21:13:50+00:00"
+    },
+    {
+      "path": "index.html",
+      "title": "Posts",
+      "author": [],
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2020-12-18T21:13:52+00:00"
+    }
+  ],
+  "collections": ["posts/posts.json"]
+}
