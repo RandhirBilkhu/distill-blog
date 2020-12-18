@@ -1,5 +1,6 @@
 name: "Randhir Bilkhu"
 title: "Randhir Bilkhu"
+theme: styles.css
 description: |
   R, Python & data science 
 base_url:
