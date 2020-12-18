@@ -32,7 +32,7 @@ In order to help improve my use of Python, I decided to try an exercise to simul
 
 The focus of these posts are more about the application of Python to achieve this task rather than the underlying theory. Interested readers can refer to [this](https://www.casact.org/pubs/forum/17spforumv2/02_Notes%20on%20Using%20Property%20Catastrophe%20Model%20Results.pdf)  paper by the Casulaty Actuarial society which explains a lot of the underlying concepts.
 
-## A bit about ELT's
+### A bit about ELT's
 
 ELTS are a common output from the RMS property catstrophe model and usually contain at least the following:
 
@@ -45,7 +45,7 @@ ELTS are a common output from the RMS property catstrophe model and usually cont
 
 We can use monte carlo techniques to sample events from this table and model loss occurrences over N years -  to generate a YLT (Year Loss Table) which can then be used for analysis.
 
-## High Level Process
+### High Level Process
 
 - generate a random sample of events by year assuming a poisson frequency
 - sample an event from the catalogue in the id and assign to the random sample
@@ -54,7 +54,7 @@ We can use monte carlo techniques to sample events from this table and model los
 - show one use case of the YLT.
 
 
-## Step 0 : Import the libraries
+### Step 0 : Import the libraries
 
 All we need is pandas and numpy - an alternative would be scipy 
 
@@ -65,7 +65,7 @@ import numpy as np
 
 ```
 
-## Step1 : Load the data
+### Step 1 : Load the data
 
 I have created a small sample ELT file - typically in reality there can thousands of catalogued events in the table.
 
@@ -88,7 +88,7 @@ print(elt)
     9  10  0.00  10000   1000    500  1000000
     
 
-## Step 2 : Transfom the raw ELT
+### Step 2 : Transfom the raw ELT
 
 We need to calculate some additional statistics which will be necessary in order to run the simulation, which can be done using pandas. 
 
@@ -160,7 +160,7 @@ print(num_events)
      2 0 1 0 0 2 1 1 1 1 1 2 3 0 0 3 1 4 0 2 0 1 0 2 0 1]
     
 
-## Step 4: Draw an Event from the ELT for each event
+### Step 4: Draw an Event from the ELT for each event
 
 I used the normalised frequency and `np.random.choice` to sample an id for each event.
 
@@ -179,7 +179,7 @@ len(sample_ids)
 
 
 
-## Step 5 : Simulate event severity
+### Step 5 : Simulate event severity
 
 I create a new dataframe called sampled_event_loss which containst the alpha, beta parameters and amount exposed,for each event sampled. This required use of the `iloc` property in pandas which allows subsetting via reference ( the reference was the array of sampled ids)
 
@@ -213,7 +213,7 @@ print(sampled_event_loss)
     [116 rows x 6 columns]
     
 
-## Step 6: Allow for zero event years in the YLT
+### Step 6: Allow for zero event years in the YLT
 
 The YLT needs to be adjusted for the years in which no loss occurred as this currently isnt being reflected in the table. We need to add a row for each year with no loss with 0 for severity. 
 This will help ensure the YLT is accurate. This is a particularly important step when looking at perils with very low frequencies such as Earthquakes.
@@ -446,7 +446,7 @@ num_events.sum()
 
 
 
-## Application : Calculate OEP Curve
+### Application : Calculate OEP Curve
 
 Here I can now utilise the YLT to calculate Occurrency exceedance probability at any return periods I specify. The OEP is the probability that the associated loss level will be exceeded by any event in any given year.
 
