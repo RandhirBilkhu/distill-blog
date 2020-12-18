@@ -9,6 +9,8 @@ date: 11-20-2020
 categories:
   - R
   - packages
+  - actuarial
+  - catastrophe models
 output:
   distill::distill_article:
     self_contained: false

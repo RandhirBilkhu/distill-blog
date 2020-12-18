@@ -9,6 +9,7 @@ date: 12-13-2020
 categories:
   - R
   - packages
+  - data wrangling
 output:
   distill::distill_article:
     toc: true

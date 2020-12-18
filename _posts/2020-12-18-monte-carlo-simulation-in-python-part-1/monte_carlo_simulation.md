@@ -1,0 +1,451 @@
+## Monte Carlo Simulation in Python - Part 1
+
+In order to help improve my use of Python, I decided to try an exercise to simulate loss events from an ELT ( Event loss table). I've split this exercise into two parts;
+
+- Part 1 is about walking through the  steps to perform the calculation. I use a Jupyter notebook to help run through this step by step
+- Part 2 is about making the code reuseable and robust. I use VSCode to create modules/tests for the differnt elements of the process.
+
+The focus of these posts are more about the application of Python to achieve this task rather than the underlying theory. Interested readers can refer to [this](https://www.casact.org/pubs/forum/17spforumv2/02_Notes%20on%20Using%20Property%20Catastrophe%20Model%20Results.pdf)  paper by the Casulaty Actuarial society which explains a lot of the underlying concepts.
+
+#### A bit about ELT's
+
+ELTS are a common output from the RMS property catstrophe model and usually contains the following:
+
+- Event ID :Unique identifier of the event
+- Rate : Annual event frequency
+- Mean : Average Loss if the event occurs
+- Sdi : Independent component of the spread of the loss if the event occurs.
+- Sdc : Correlated component of the spread of the loss if the event occurs.
+- Exposure : Total amount of limits exposed to the event (Maximum loss)
+
+We can use monte carlo techniques to sample events from this table and model loss occurences over N years-  to generate a YLT (Year Loss Table) which can then be used for analysis.
+
+#### High Level Process
+
+- generate a random sample of events by year assuming a poisson frequency
+- sample an event from the catalogue in the id and assign to the random sample
+- for each event generate a loss amount assuming a beta distribition
+- make some final modifications to tidy up the YLT
+- show one use case of the YLT.
+
+
+#### Step 0 : Import the libraries
+
+All we need is pandas and numpy - an alternative would be scipy 
+
+
+```python
+import pandas as pd
+import numpy as np
+
+```
+
+#### Step1 : Load the data
+
+I have created a small sample ELT file - typically in reality there can thousands of catalogued events in the table.
+
+
+```python
+elt = pd.read_csv("example.csv")
+print(elt)
+```
+
+       id  rate   mean  sdevi  sdevc      exp
+    0   1  0.10    500    500    200   100000
+    1   2  0.10    200    400    100     5000
+    2   3  0.20    300    200    400    40000
+    3   4  0.10    100    300    500     4000
+    4   5  0.20    500    100    200     2000
+    5   6  0.25    200    200    500    50000
+    6   7  0.01   1000    500    600   100000
+    7   8  0.12    250    300    100     5000
+    8   9  0.14   1000    500    200     6000
+    9  10  0.00  10000   1000    500  1000000
+    
+
+#### Step 2 : Transfom the raw ELT
+
+We need to calculate some additional statistics which will be necessary in order to run the simulation, which can be done using pandas. 
+
+I also set the index to start from 1 (Python by default starts from 0), firstly because I'm used to starting from one as an R user and secondly it will make some of the operations further on much easier to manage.  
+
+*Note the syntax += which in python is equivalent to x = x + 1*
+
+
+```python
+elt['mdr'] = elt['mean'] / elt['exp']  # calculates the mean damage ratio equivalent to average loss over total exposed
+elt['sdev'] = elt['sdevi'] + elt['sdevc'] # sums up the correlated and independent standard deviations 
+elt['cov'] = elt['sdev'] /elt['mean'] # calculates covariance based on total standard deviation
+elt['alpha'] = (1 - elt['mdr']) / (elt['cov']**2 - elt['mdr']) # generates an alpha parameter for beta distribution
+#alpha is finite <-0 TODO
+elt['beta'] = (elt['alpha'] * (1 - elt['mdr'])) / elt['mdr']  # generates a beta parameter for beta distribution
+
+lda = elt['rate'].sum()  # total expected event frequency 
+
+elt['rand_num'] = elt['rate'] / lda # probability of event occuring = normalised event frequency 
+
+elt.index += 1 ### want to set index to start from 1 ( so sampling works)
+print(elt)
+```
+
+        id  rate   mean  sdevi  sdevc      exp       mdr  sdev   cov      alpha  \
+    1    1  0.10    500    500    200   100000  0.005000   700  1.40   0.508951   
+    2    2  0.10    200    400    100     5000  0.040000   500  2.50   0.154589   
+    3    3  0.20    300    200    400    40000  0.007500   600  2.00   0.248591   
+    4    4  0.10    100    300    500     4000  0.025000   800  8.00   0.015240   
+    5    5  0.20    500    100    200     2000  0.250000   300  0.60   6.818182   
+    6    6  0.25    200    200    500    50000  0.004000   700  3.50   0.081333   
+    7    7  0.01   1000    500    600   100000  0.010000  1100  1.10   0.825000   
+    8    8  0.12    250    300    100     5000  0.050000   400  1.60   0.378486   
+    9    9  0.14   1000    500    200     6000  0.166667   700  0.70   2.577320   
+    10  10  0.00  10000   1000    500  1000000  0.010000  1500  0.15  79.200000   
+    
+               beta  rand_num  
+    1    101.281330  0.081967  
+    2      3.710145  0.081967  
+    3     32.896890  0.163934  
+    4      0.594373  0.081967  
+    5     20.454545  0.163934  
+    6     20.251837  0.204918  
+    7     81.675000  0.008197  
+    8      7.191235  0.098361  
+    9     12.886598  0.114754  
+    10  7840.800000  0.000000  
+    
+
+#### Step 3 : Simulate Frequency of events by year
+
+We can run the simulation over 100 years.  This parameter will need to be much higher in practice in order to provide a reasonable YLT.  Especially when using ELTS for Earthquake losses which have very low probabilities of occurence.
+
+I assume frequency is a poisson random variable ( alternate would be negative binomial but would require an extra step to estimate the variance). We set the mean frequency to be equal to the sum of frequencies of each event and then use np.random.poisson to generate a number of events for each year
+
+random.seed() is useful to reproduce the data given by a pseudo-random number generator. By re-using a seed value, we can regenerate the same data multiple times as multiple threads are not running. This is helpful for reproducibility purposes
+
+
+```python
+lda = elt['rate'].sum() ### total expected annual event frequency
+sims = 100  ## equivalent to number of years we will  simulate 
+np.random.seed(42)
+num_events = np.random.poisson(lda, sims) 
+print(num_events)
+```
+
+    [2 1 0 0 3 2 0 0 1 1 1 0 1 1 2 1 0 3 0 2 1 1 1 1 0 6 0 0 1 0 2 1 1 2 0 4 1
+     2 0 1 3 0 3 1 1 0 0 1 2 2 0 0 0 5 4 0 0 3 1 0 0 2 2 2 1 0 0 2 0 1 0 2 2 1
+     2 0 1 0 0 2 1 1 1 1 1 2 3 0 0 3 1 4 0 2 0 1 0 2 0 1]
+    
+
+#### Step 4: Draw an Event from the ELT for each event
+
+I used the normalised frequency and `np.random.choice` to sample an id for each event.
+
+
+
+```python
+sample_ids = np.random.choice( a = elt['id'] , size = num_events.sum() , replace= True, p = elt['rand_num'] ) # for each occurrence we sample a loss event from the elt and create an array of ids
+
+len(sample_ids) 
+```
+
+
+
+
+    116
+
+
+
+#### Step 5 : Simulate event severity
+
+I create a new dataframe called sampled_event_loss which containst the alpha, beta parameters and amount exposed,for each event sampled. This required use of the `iloc` property in pandas which allows subsetting via reference ( the reference was the array of sampled ids)
+
+we can apply `random.beta` from numpy to sample a mean damage ratio (mdr) for each event from the distribution. Loss severity can be calculated by multiplying the sampled mdr with the amount exposed.
+
+Almost there with the YLT! Now just a few modifications are necessary.
+
+
+
+```python
+sampled_event_loss = elt[['id', 'alpha','beta','exp']].iloc[elt.index.get_indexer(sample_ids)] ### this took some effort! 
+sampled_event_loss['severity_mdr'] = sampled_event_loss.apply( lambda x: np.random.beta( x['alpha'] , x['beta']  ) , axis=1 ) ### use apply with axis =1 to use function on each row
+sampled_event_loss['severity'] = sampled_event_loss['severity_mdr'] * sampled_event_loss['exp'] ### this gives us severity for each event
+print(sampled_event_loss)
+
+```
+
+        id     alpha       beta    exp  severity_mdr      severity
+    3    3  0.248591  32.896890  40000  1.108744e-09  4.434975e-05
+    6    6  0.081333  20.251837  50000  1.641959e-14  8.209797e-10
+    6    6  0.081333  20.251837  50000  1.544267e-11  7.721333e-07
+    8    8  0.378486   7.191235   5000  7.498051e-05  3.749025e-01
+    6    6  0.081333  20.251837  50000  1.355502e-05  6.777512e-01
+    ..  ..       ...        ...    ...           ...           ...
+    6    6  0.081333  20.251837  50000  4.924032e-07  2.462016e-02
+    5    5  6.818182  20.454545   2000  2.377589e-01  4.755179e+02
+    3    3  0.248591  32.896890  40000  4.575936e-04  1.830374e+01
+    4    4  0.015240   0.594373   4000  6.785872e-22  2.714349e-18
+    6    6  0.081333  20.251837  50000  1.918026e-11  9.590128e-07
+    
+    [116 rows x 6 columns]
+    
+
+#### Step 6: Allow for zero event years in the YLT
+
+The YLT needs to be adjusted for the years in which no loss occurred as this currently isnt being reflected in the table. We need to add a row for each year with no loss with 0 for severity. 
+This will help ensure the YLT is accurate. This is a particularly important step when looking at perils with very low frequencies such as Earthquakes.
+
+
+
+
+```python
+num_events
+### have years with 0 events this will throw off exceedance probability calculations
+```
+
+
+
+
+    array([2, 1, 0, 0, 3, 2, 0, 0, 1, 1, 1, 0, 1, 1, 2, 1, 0, 3, 0, 2, 1, 1,
+           1, 1, 0, 6, 0, 0, 1, 0, 2, 1, 1, 2, 0, 4, 1, 2, 0, 1, 3, 0, 3, 1,
+           1, 0, 0, 1, 2, 2, 0, 0, 0, 5, 4, 0, 0, 3, 1, 0, 0, 2, 2, 2, 1, 0,
+           0, 2, 0, 1, 0, 2, 2, 1, 2, 0, 1, 0, 0, 2, 1, 1, 1, 1, 1, 2, 3, 0,
+           0, 3, 1, 4, 0, 2, 0, 1, 0, 2, 0, 1])
+
+
+
+I used np.arange to generate a sequence from 1 to 100 for each year. Note by default the stop value is excluded hence the need for sims + 1. Next we create a dataframe from that array with the column name year.
+
+Finally we can use np.repeat which will create a feature in sampled_event_loss for the year in which each event occurred.
+
+
+```python
+year = np.arange(1, sims+1, 1) # start (included): 0, stop (excluded): 10, step:1
+all_years = pd.DataFrame(year , columns=['year'])
+
+sampled_event_loss['year'] = np.repeat(year, num_events)
+print(sampled_event_loss)
+```
+
+        id     alpha       beta    exp  severity_mdr      severity  year
+    3    3  0.248591  32.896890  40000  1.108744e-09  4.434975e-05     1
+    6    6  0.081333  20.251837  50000  1.641959e-14  8.209797e-10     1
+    6    6  0.081333  20.251837  50000  1.544267e-11  7.721333e-07     2
+    8    8  0.378486   7.191235   5000  7.498051e-05  3.749025e-01     5
+    6    6  0.081333  20.251837  50000  1.355502e-05  6.777512e-01     5
+    ..  ..       ...        ...    ...           ...           ...   ...
+    6    6  0.081333  20.251837  50000  4.924032e-07  2.462016e-02    94
+    5    5  6.818182  20.454545   2000  2.377589e-01  4.755179e+02    96
+    3    3  0.248591  32.896890  40000  4.575936e-04  1.830374e+01    98
+    4    4  0.015240   0.594373   4000  6.785872e-22  2.714349e-18    98
+    6    6  0.081333  20.251837  50000  1.918026e-11  9.590128e-07   100
+    
+    [116 rows x 7 columns]
+    
+
+Now we can create a dataframe YLT with just year and severity and use pd.merge to add in the years with 0 loss. Without using `fillna()` these will appear as NaN in the data frame
+
+We end up with a dataframe which shows the year in which loss occured and the loss amount. This can now be the basis for applying a reinsurance treaty structure and calculating layered losses. 
+
+
+```python
+ylt = sampled_event_loss[['year', 'severity']]
+ylt = pd.merge(ylt, all_years, how='right').fillna(0)
+ 
+print(ylt.to_string()) # allows all records to be displayed
+
+```
+
+         year      severity
+    0       1  4.434975e-05
+    1       1  8.209797e-10
+    2       2  7.721333e-07
+    3       3  0.000000e+00
+    4       4  0.000000e+00
+    5       5  3.749025e-01
+    6       5  6.777512e-01
+    7       5  5.491075e+02
+    8       6  5.105934e+01
+    9       6  6.427178e-19
+    10      7  0.000000e+00
+    11      8  0.000000e+00
+    12      9  1.709651e+03
+    13     10  1.384307e+01
+    14     11  5.109882e+02
+    15     12  0.000000e+00
+    16     13  3.043422e-10
+    17     14  1.191095e+03
+    18     15  7.401779e+01
+    19     15  3.821698e+02
+    20     16  3.786217e+02
+    21     17  0.000000e+00
+    22     18  1.404651e-09
+    23     18  4.645606e+02
+    24     18  1.337478e+02
+    25     19  0.000000e+00
+    26     20  5.501849e-04
+    27     20  6.297897e+01
+    28     21  2.155536e+02
+    29     22  9.456517e+01
+    30     23  6.318721e-02
+    31     24  1.463509e+03
+    32     25  0.000000e+00
+    33     26  4.000737e+02
+    34     26  6.542851e+02
+    35     26  4.995096e-14
+    36     26  1.531346e+01
+    37     26  8.527407e+02
+    38     26  6.277614e+02
+    39     27  0.000000e+00
+    40     28  0.000000e+00
+    41     29  1.025373e+03
+    42     30  0.000000e+00
+    43     31  8.203426e+02
+    44     31  6.533643e+01
+    45     32  7.202268e+00
+    46     33  3.569292e-19
+    47     34  6.258983e+01
+    48     34  4.648111e-02
+    49     35  0.000000e+00
+    50     36  2.446549e+02
+    51     36  5.153527e+02
+    52     36  1.599666e+03
+    53     36  2.142401e-07
+    54     37  3.825918e+02
+    55     38  1.231233e-05
+    56     38  1.290300e+03
+    57     39  0.000000e+00
+    58     40  4.572607e+02
+    59     41  2.817630e-01
+    60     41  5.395940e+02
+    61     41  5.805758e+02
+    62     42  0.000000e+00
+    63     43  4.282555e+02
+    64     43  1.033512e-05
+    65     43  8.384080e-03
+    66     44  1.071078e-26
+    67     45  6.705483e+02
+    68     46  0.000000e+00
+    69     47  0.000000e+00
+    70     48  1.174639e+03
+    71     49  3.909565e+01
+    72     49  6.985921e-01
+    73     50  4.954364e+02
+    74     50  6.822492e+02
+    75     51  0.000000e+00
+    76     52  0.000000e+00
+    77     53  0.000000e+00
+    78     54  3.839980e+02
+    79     54  7.611154e+01
+    80     54  1.545606e-14
+    81     54  3.325711e-04
+    82     54  9.315729e+00
+    83     55  7.976122e+01
+    84     55  4.177383e-36
+    85     55  8.632855e+00
+    86     55  2.856225e+01
+    87     56  0.000000e+00
+    88     57  0.000000e+00
+    89     58  1.293269e+00
+    90     58  1.234734e+02
+    91     58  6.529987e+02
+    92     59  5.766023e+02
+    93     60  0.000000e+00
+    94     61  0.000000e+00
+    95     62  4.892098e+01
+    96     62  3.527225e+00
+    97     63  4.131111e+02
+    98     63  8.828718e+01
+    99     64  8.390815e-01
+    100    64  2.293760e-23
+    101    65  5.391410e+02
+    102    66  0.000000e+00
+    103    67  0.000000e+00
+    104    68  6.567555e+02
+    105    68  3.015369e+00
+    106    69  0.000000e+00
+    107    70  3.573933e+01
+    108    71  0.000000e+00
+    109    72  6.060894e-09
+    110    72  3.794436e+01
+    111    73  1.055675e+02
+    112    73  3.697382e+02
+    113    74  6.461396e+02
+    114    75  2.149523e+03
+    115    75  1.141927e+03
+    116    76  0.000000e+00
+    117    77  7.663019e+02
+    118    78  0.000000e+00
+    119    79  0.000000e+00
+    120    80  4.003370e+02
+    121    80  9.739867e+01
+    122    81  1.471702e+02
+    123    82  1.182795e+01
+    124    83  5.548184e+02
+    125    84  2.044581e+03
+    126    85  7.969508e+02
+    127    86  9.489739e+02
+    128    86  1.785455e+01
+    129    87  5.495236e+02
+    130    87  9.719987e-60
+    131    87  3.351133e-01
+    132    88  0.000000e+00
+    133    89  0.000000e+00
+    134    90  1.436955e+02
+    135    90  3.219530e+02
+    136    90  4.486940e+02
+    137    91  1.002510e+03
+    138    92  5.628708e-01
+    139    92  1.236078e+03
+    140    92  1.578653e+03
+    141    92  1.365199e+03
+    142    93  0.000000e+00
+    143    94  4.649067e+02
+    144    94  2.462016e-02
+    145    95  0.000000e+00
+    146    96  4.755179e+02
+    147    97  0.000000e+00
+    148    98  1.830374e+01
+    149    98  2.714349e-18
+    150    99  0.000000e+00
+    151   100  9.590128e-07
+    
+
+
+```python
+num_events.sum()
+```
+
+
+
+
+    119
+
+
+
+#### Application : Calculate OEP Curve
+
+Here I can now utilise the YLT to calculate Occurrency exceedance probability at any return periods I specify. The OEP is the probability that the associated loss level will be exceeded by any event in any given year.
+
+
+```python
+return_period = pd.DataFrame([10000,5000,1000,500,250,200,100,50, 25,10,5,2 ], columns=['return_period'])
+return_period['ntile'] = 1 - 1 / return_period['return_period'] 
+
+print(ylt['severity'].quantile(return_period['ntile']))
+
+```
+
+    ntile
+    0.9999    2147.938575
+    0.9998    2146.353945
+    0.9990    2133.676901
+    0.9980    2117.830597
+    0.9960    2086.137988
+    0.9950    2070.291683
+    0.9900    1873.766736
+    0.9800    1599.245710
+    0.9600    1362.202700
+    0.9000     849.500856
+    0.8000     547.204780
+    0.5000      14.578265
+    Name: severity, dtype: float64
+    
