@@ -1,0 +1,172 @@
+---
+title: "Monte Carlo Simulation in Python Part 2"
+description: |
+  Use classes and modules and wrap inside a Python package to make the code in part 1 reuseable.
+preview: package.png
+author:
+  - name: Randhir Bilkhu
+    url: {}
+date: 12-22-2020
+categories:
+  - Python
+  - pandas
+  - numpy
+  - actuarial
+  - catastrophe models
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+In part 1 I used a Jupyter notebook to perform step by step calculations in order to generate a YLT. I feel that Jupyter notebooks/R scripts are useful for ad-hoc analysis and getting to an answer quickly. However I don't think they are the best for making code ready for production. 
+
+In this post, I want to take that code and make it much easier to re-use in the future. I will do this by wrapping up the bulk of the steps inside two classes and putting them into modules
+
+Before I start I will define some of the terminology.
+
+Classes allow objects to be created, effectively a blueprint for how an object should look and behave. Each object can have attributes and methods which can be utilised. Methods are like functions that belong to the object.
+
+A module is a file containing Python definitions and statements. The file name is the module name with the suffix .py appended.
+
+
+#### Creating the classes
+
+I decided to start by creating a class Elt (see below). I am going to use this class to return a parameterised ELT from a raw elt dataframe.
+
+Firstly I start by creating a function called `__init__` this method will be called any time an object is created from the class and will allow the class to initialize the attributes of the class
+Note that inside `__init__` I have two arguments, self and pandas_obj. self is a reference to the current instance of the class (note you dont have to use the word 'self' but it is the convention. )
+The second is pandas_obj as I am going to be passing a dataframe into this class.
+
+Secondly, I define a validate method which will raise an error if the required columns are not in the dataframe.The main method for this class is the function parameterise  - inside this function I put all of the calculations to generate the parameterised elt.
+
+At the end, I also define a property which is the sum of event frequency.
+
+```{python, echo=TRUE}
+class Elt:
+    
+    def __init__(self,pandas_obj):
+        self.df = pandas_obj
+        self._validate(pandas_obj)
+    
+    @staticmethod
+    def _validate(obj):
+        # verify the minumum required columns are present in the intial dataframe
+        if 'id' not in obj.columns or 'rate' not in obj.columns or 'mean' not in obj.columns or 'sdevi' not in obj.columns or 'sdevc' not in obj.columns or 'exp' not in obj.columns:
+            raise AttributeError("dataframe must have id, rate, mean, sdevi, sdevc and exp columns")
+
+    def parameterise(self):
+        self.df['mdr'] = self.df['mean']  /self.df['exp']   # calculates the mean damage ratio equivalent to average loss over total exposed
+        self.df['sdev'] = self.df['sdevi'] + self.df['sdevc'] # sums up the correlated and independent standard deviations 
+        self.df['cov'] = self.df['sdev'] /self.df['mean'] # calculates covariance based on total standard deviation
+        self.df['alpha'] = (1 - self.df['mdr']) / (self.df['cov']**2 - self.df['mdr']) # generates an alpha parameter for beta distribution
+        #alpha is finite <-0 TODO
+        self.df['beta'] = (self.df['alpha'] * (1 - self.df['mdr'])) / self.df['mdr']  # generates a beta parameter for beta distribution
+        self.df['rand_num'] = self.df['rate'] / self.df['rate'].sum()  # probability of event occuring = normalised event frequency 
+        self.df.index += 1 ### want to set index to start from 1 ( so sampling works)
+
+    @property
+    def events(self):
+        total = self.df['rate'].sum()
+    
+```
+
+
+Now I can write a class for everything needed for the YLT:
+
+```{python, echo=TRUE}
+import numpy as np
+
+class Ylt:
+    """
+    generates YLT
+    """
+    seed = np.random.seed(42)
+    
+    def __init__(self,pandas_obj):
+        self.df = pandas_obj
+
+    def generate_ylt(self, sims=10):
+
+        num_events = np.random.poisson(self.df['rate'].sum(), sims) 
+
+        sample_ids = np.random.choice( a = self.df['id'] , size = num_events.sum() , replace= True, p = self.df['rand_num'] ) 
+        self.df = self.df[['id', 'alpha','beta','exp']].iloc[self.df.index.get_indexer(sample_ids)] ### this took some effort! 
+        self.df['severity_mdr'] = self.df.apply( lambda x: np.random.beta( x['alpha'] , x['beta']  ) , axis=1 ) ### use apply with axis =1 to use function on each row
+        self.df['severity'] = self.df['severity_mdr'] * self.df['exp'] ### this gives us severity for each event
+
+        year = np.arange(1, sims + 1, 1) # start (included): 0, stop (excluded): 10, step:1
+        all_years = pd.DataFrame(year , columns=['year'])
+
+        self.df['year'] = np.repeat(year, num_events)
+        self.df = self.df[['year', 'severity']]
+        self.df = pd.merge(self.df, all_years, how='right').fillna(0)
+
+    def oep(self):
+        
+        rp = pd.DataFrame([10000,5000,1000,500,250,200,100,50, 25,10,5,2], columns=['return_period'])
+        rp['ntile'] = 1 - 1 / rp['return_period'] 
+        return(self.df.groupby(['year'])['severity'].max().quantile(rp['ntile']))
+
+```
+
+
+Firstly I use numpy to set the random seed so that results are reproducible. (Note - would it make a difference inside the init function?)
+
+Next, I define a method generate_ylt which performs the simulation steps in part1 and returns the YLT containing a column with year and column with the loss amount.
+
+Lastly I define a method to calculate oep. For the purposes of this exercise I fixed the calculation of OEP at the specified return periods, but I could have passed an additional argument `rp` along with self to allow the return periods to be variable.
+
+#### Containg the modules inside a package
+
+I can define these two classes as modules as elt.py and ylt.py and contain them in a package called elt_py. In order to read the folder as a package an empty .py file with `__init__.py` is also needed at the folder level.
+
+There are a few other things to take care of in order to distribute the code as a package but they are outside the scope of this post.
+
+![snippet from VS code](package.png) 
+Once I have create the package, I can import the classes from the elt_py package and the process generate a YLT is much simplified. I can generate the oep with just 8 lines of code and the ability to instantiate different instances of ELTs and YLTs make it easy to apply these classes to different ELTs
+
+```python
+from elt_py.elt import Elt
+from elt_py.ylt import Ylt
+
+import pandas as pd
+
+X = pd.read_csv("example.csv")
+
+elt = Elt(X)
+elt.parameterise()
+ylt = Ylt(elt.df)
+ylt.generate_ylt(sims=2000)
+
+print(ylt.oep())
+
+```
+
+
+
+![snippet from VS code](jupyter.png) 
+
+#### Summary
+
+Creating classes and containing code in modules requires a good deal of extra work over writing an ad-hoc script. However by writing a class and housing the code into modules ( and a package), it makes it much easier to re-use and distribute the code.
+
+One of the other major benefits would be the ability to incorporate unit testing on the methods being created which I will cover in a future post in detail.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

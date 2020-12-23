@@ -21,15 +21,15 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-First version of eltr released on [github](https://github.com/RandhirBilkhu/catr)! 
+You can find eltr on [github](https://github.com/RandhirBilkhu/eltr)
 
 My goal with this package is to create functions which are helpful to analysing Catastrophe model outputs particularly in a re-insurance context. 
 
-Intial documentation can be found [here](https://randhirbilkhu.github.io/catr/).
+Intial documentation can be found [here](https://randhirbilkhu.github.io/eltr/).
 
 This first release is intended to be a foundation upon which to build. I have a pipeline of features to be added but would welcome ideas for development.
 
-Please feel free to raise an issue [here](https://github.com/RandhirBilkhu/catr/issues)
+Please feel free to raise an issue [here](https://github.com/RandhirBilkhu/eltr/issues)
 
 ### Release Notes 0.1.0
 

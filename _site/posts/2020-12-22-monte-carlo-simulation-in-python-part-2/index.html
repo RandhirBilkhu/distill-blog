@@ -20,19 +20,18 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -52,7 +51,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
@@ -86,38 +85,38 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-<title>Randhir Bilkhu: eltr</title>
+<title>Randhir Bilkhu: Monte Carlo Simulation in Python Part 2</title>
 
-<meta property="description" itemprop="description" content="a package to help analyse outputs from catastrophe models in a reinsurance context"/>
+<meta property="description" itemprop="description" content="Use classes and modules and wrap inside a Python package to make the code in part 1 reuseable."/>
 
 
 <!--  https://schema.org/Article -->
-<meta property="article:published" itemprop="datePublished" content="2020-11-20"/>
-<meta property="article:created" itemprop="dateCreated" content="2020-11-20"/>
+<meta property="article:published" itemprop="datePublished" content="2020-12-22"/>
+<meta property="article:created" itemprop="dateCreated" content="2020-12-22"/>
 <meta name="article:author" content="Randhir Bilkhu"/>
 
 <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-<meta property="og:title" content="Randhir Bilkhu: eltr"/>
+<meta property="og:title" content="Randhir Bilkhu: Monte Carlo Simulation in Python Part 2"/>
 <meta property="og:type" content="article"/>
-<meta property="og:description" content="a package to help analyse outputs from catastrophe models in a reinsurance context"/>
+<meta property="og:description" content="Use classes and modules and wrap inside a Python package to make the code in part 1 reuseable."/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="Randhir Bilkhu"/>
 
 <!--  https://dev.twitter.com/cards/types/summary -->
 <meta property="twitter:card" content="summary"/>
-<meta property="twitter:title" content="Randhir Bilkhu: eltr"/>
-<meta property="twitter:description" content="a package to help analyse outputs from catastrophe models in a reinsurance context"/>
+<meta property="twitter:title" content="Randhir Bilkhu: Monte Carlo Simulation in Python Part 2"/>
+<meta property="twitter:description" content="Use classes and modules and wrap inside a Python package to make the code in part 1 reuseable."/>
 
 <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","preview","author","date","categories","output"]}},"value":[{"type":"character","attributes":{},"value":["eltr"]},{"type":"character","attributes":{},"value":["a package to help analyse outputs from catastrophe models in a reinsurance context"]},{"type":"character","attributes":{},"value":["hurr.jpg"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Randhir Bilkhu"]}]}]},{"type":"character","attributes":{},"value":["11-20-2020"]},{"type":"character","attributes":{},"value":["R","packages","actuarial","catastrophe models"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","preview","author","date","categories","output"]}},"value":[{"type":"character","attributes":{},"value":["Monte Carlo Simulation in Python Part 2"]},{"type":"character","attributes":{},"value":["Use classes and modules and wrap inside a Python package to make the code in part 1 reuseable."]},{"type":"character","attributes":{},"value":["package.png"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Randhir Bilkhu"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["12-22-2020"]},{"type":"character","attributes":{},"value":["Python","pandas","numpy","actuarial","catastrophe models"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["eltcat_files/anchor-4.2.2/anchor.min.js","eltcat_files/bowser-1.9.3/bowser.min.js","eltcat_files/distill-2.2.21/template.v2.js","eltcat_files/jquery-1.11.3/jquery.min.js","eltcat_files/webcomponents-2.0.0/webcomponents.js","hurr.jpg"]}
+  {"type":"character","attributes":{},"value":["jupyter.PNG","monte-carlo-simulation-in-python-part-2_files/anchor-4.2.2/anchor.min.js","monte-carlo-simulation-in-python-part-2_files/bowser-1.9.3/bowser.min.js","monte-carlo-simulation-in-python-part-2_files/distill-2.2.21/template.v2.js","monte-carlo-simulation-in-python-part-2_files/header-attrs-2.5/header-attrs.js","monte-carlo-simulation-in-python-part-2_files/jquery-1.11.3/jquery.min.js","monte-carlo-simulation-in-python-part-2_files/webcomponents-2.0.0/webcomponents.js","package.PNG"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2339,6 +2338,7 @@ d-appendix d-footnote-list a.footnote-backlink {
 	color: var(--hover-color, white);
 }</style>
 <!--/radix_placeholder_distill-->
+  <script src="../../site_libs/header-attrs-2.5/header-attrs.js"></script>
   <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="../../site_libs/anchor-4.2.2/anchor.min.js"></script>
   <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
@@ -2355,7 +2355,7 @@ d-appendix d-footnote-list a.footnote-backlink {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"eltr","description":"a package to help analyse outputs from catastrophe models in a reinsurance context","authors":[{"author":"Randhir Bilkhu","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2020-11-20T00:00:00.000+00:00","citationText":"Bilkhu, 2020"}
+{"title":"Monte Carlo Simulation in Python Part 2","description":"Use classes and modules and wrap inside a Python package to make the code in part 1 reuseable.","authors":[{"author":"Randhir Bilkhu","authorURL":{},"affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2020-12-22T00:00:00.000+00:00","citationText":"Bilkhu, 2020"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2387,38 +2387,126 @@ d-appendix d-footnote-list a.footnote-backlink {
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>eltr</h1>
+<h1>Monte Carlo Simulation in Python Part 2</h1>
 <!--radix_placeholder_categories-->
 <div class="dt-tags">
-  <a href="../../index.html#category:R" class="dt-tag">R</a>
-  <a href="../../index.html#category:packages" class="dt-tag">packages</a>
+  <a href="../../index.html#category:Python" class="dt-tag">Python</a>
+  <a href="../../index.html#category:pandas" class="dt-tag">pandas</a>
+  <a href="../../index.html#category:numpy" class="dt-tag">numpy</a>
   <a href="../../index.html#category:actuarial" class="dt-tag">actuarial</a>
   <a href="../../index.html#category:catastrophe_models" class="dt-tag">catastrophe models</a>
 </div>
 <!--/radix_placeholder_categories-->
-<p><p>a package to help analyse outputs from catastrophe models in a reinsurance context</p></p>
+<p><p>Use classes and modules and wrap inside a Python package to make the code in part 1 reuseable.</p></p>
 </div>
 
 <div class="d-byline">
-  Randhir Bilkhu  
+  Randhir Bilkhu true 
   
-<br/>11-20-2020
+<br/>12-22-2020
 </div>
 
 <div class="d-article">
-<p>You can find eltr on <a href="https://github.com/RandhirBilkhu/eltr">github</a></p>
-<p>My goal with this package is to create functions which are helpful to analysing Catastrophe model outputs particularly in a re-insurance context.</p>
-<p>Intial documentation can be found <a href="https://randhirbilkhu.github.io/eltr/">here</a>.</p>
-<p>This first release is intended to be a foundation upon which to build. I have a pipeline of features to be added but would welcome ideas for development.</p>
-<p>Please feel free to raise an issue <a href="https://github.com/RandhirBilkhu/eltr/issues">here</a></p>
-<h3 id="release-notes-0.1.0">Release Notes 0.1.0</h3>
-<ul>
-<li><p><code>create_elt</code> transforms a raw elt into a object with beta distribution parameters for secondary uncertainty</p></li>
-<li><p><code>create_ylt</code> runs a monte carlo simulation assuming a poisson distribution for primary uncertainty</p></li>
-<li><p><code>create_oep_curve</code> calculates exceedance probability and returns the occurrence loss at specified return periods</p></li>
-<li><p><code>layer_loss</code> calculates limited loss to layer</p></li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>In part 1 I used a Jupyter notebook to perform step by step calculations in order to generate a YLT. I feel that Jupyter notebooks/R scripts are useful for ad-hoc analysis and getting to an answer quickly. However I don’t think they are the best for making code ready for production.</p>
+<p>In this post, I want to take that code and make it much easier to re-use in the future. I will do this by wrapping up the bulk of the steps inside two classes and putting them into modules</p>
+<p>Before I start I will define some of the terminology.</p>
+<p>Classes allow objects to be created, effectively a blueprint for how an object should look and behave. Each object can have attributes and methods which can be utilised. Methods are like functions that belong to the object.</p>
+<p>A module is a file containing Python definitions and statements. The file name is the module name with the suffix .py appended.</p>
+<h4 id="creating-the-classes">Creating the classes</h4>
+<p>I decided to start by creating a class Elt (see below). I am going to use this class to return a parameterised ELT from a raw elt dataframe.</p>
+<p>Firstly I start by creating a function called <code>__init__</code> this method will be called any time an object is created from the class and will allow the class to initialize the attributes of the class Note that inside <code>__init__</code> I have two arguments, self and pandas_obj. self is a reference to the current instance of the class (note you dont have to use the word ‘self’ but it is the convention. ) The second is pandas_obj as I am going to be passing a dataframe into this class.</p>
+<p>Secondly, I define a validate method which will raise an error if the required columns are not in the dataframe.The main method for this class is the function parameterise - inside this function I put all of the calculations to generate the parameterised elt.</p>
+<p>At the end, I also define a property which is the sum of event frequency.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Elt:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,pandas_obj):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df <span class="op">=</span> pandas_obj</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._validate(pandas_obj)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">@staticmethod</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _validate(obj):</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># verify the minumum required columns are present in the intial dataframe</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">&#39;id&#39;</span> <span class="kw">not</span> <span class="kw">in</span> obj.columns <span class="kw">or</span> <span class="st">&#39;rate&#39;</span> <span class="kw">not</span> <span class="kw">in</span> obj.columns <span class="kw">or</span> <span class="st">&#39;mean&#39;</span> <span class="kw">not</span> <span class="kw">in</span> obj.columns <span class="kw">or</span> <span class="st">&#39;sdevi&#39;</span> <span class="kw">not</span> <span class="kw">in</span> obj.columns <span class="kw">or</span> <span class="st">&#39;sdevc&#39;</span> <span class="kw">not</span> <span class="kw">in</span> obj.columns <span class="kw">or</span> <span class="st">&#39;exp&#39;</span> <span class="kw">not</span> <span class="kw">in</span> obj.columns:</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">AttributeError</span>(<span class="st">&quot;dataframe must have id, rate, mean, sdevi, sdevc and exp columns&quot;</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> parameterise(<span class="va">self</span>):</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df[<span class="st">&#39;mdr&#39;</span>] <span class="op">=</span> <span class="va">self</span>.df[<span class="st">&#39;mean&#39;</span>]  <span class="op">/</span><span class="va">self</span>.df[<span class="st">&#39;exp&#39;</span>]   <span class="co"># calculates the mean damage ratio equivalent to average loss over total exposed</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df[<span class="st">&#39;sdev&#39;</span>] <span class="op">=</span> <span class="va">self</span>.df[<span class="st">&#39;sdevi&#39;</span>] <span class="op">+</span> <span class="va">self</span>.df[<span class="st">&#39;sdevc&#39;</span>] <span class="co"># sums up the correlated and independent standard deviations </span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df[<span class="st">&#39;cov&#39;</span>] <span class="op">=</span> <span class="va">self</span>.df[<span class="st">&#39;sdev&#39;</span>] <span class="op">/</span><span class="va">self</span>.df[<span class="st">&#39;mean&#39;</span>] <span class="co"># calculates covariance based on total standard deviation</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df[<span class="st">&#39;alpha&#39;</span>] <span class="op">=</span> (<span class="dv">1</span> <span class="op">-</span> <span class="va">self</span>.df[<span class="st">&#39;mdr&#39;</span>]) <span class="op">/</span> (<span class="va">self</span>.df[<span class="st">&#39;cov&#39;</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="va">self</span>.df[<span class="st">&#39;mdr&#39;</span>]) <span class="co"># generates an alpha parameter for beta distribution</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        <span class="co">#alpha is finite &lt;-0 </span><span class="al">TODO</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df[<span class="st">&#39;beta&#39;</span>] <span class="op">=</span> (<span class="va">self</span>.df[<span class="st">&#39;alpha&#39;</span>] <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> <span class="va">self</span>.df[<span class="st">&#39;mdr&#39;</span>])) <span class="op">/</span> <span class="va">self</span>.df[<span class="st">&#39;mdr&#39;</span>]  <span class="co"># generates a beta parameter for beta distribution</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df[<span class="st">&#39;rand_num&#39;</span>] <span class="op">=</span> <span class="va">self</span>.df[<span class="st">&#39;rate&#39;</span>] <span class="op">/</span> <span class="va">self</span>.df[<span class="st">&#39;rate&#39;</span>].<span class="bu">sum</span>()  <span class="co"># probability of event occuring = normalised event frequency </span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df.index <span class="op">+=</span> <span class="dv">1</span> <span class="co">### want to set index to start from 1 ( so sampling works)</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> events(<span class="va">self</span>):</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        total <span class="op">=</span> <span class="va">self</span>.df[<span class="st">&#39;rate&#39;</span>].<span class="bu">sum</span>()</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    </span></code></pre></div>
+</div>
+<p>Now I can write a class for everything needed for the YLT:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Ylt:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">    generates YLT</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    seed <span class="op">=</span> np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,pandas_obj):</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df <span class="op">=</span> pandas_obj</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> generate_ylt(<span class="va">self</span>, sims<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        num_events <span class="op">=</span> np.random.poisson(<span class="va">self</span>.df[<span class="st">&#39;rate&#39;</span>].<span class="bu">sum</span>(), sims) </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        sample_ids <span class="op">=</span> np.random.choice( a <span class="op">=</span> <span class="va">self</span>.df[<span class="st">&#39;id&#39;</span>] , size <span class="op">=</span> num_events.<span class="bu">sum</span>() , replace<span class="op">=</span> <span class="va">True</span>, p <span class="op">=</span> <span class="va">self</span>.df[<span class="st">&#39;rand_num&#39;</span>] ) </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df <span class="op">=</span> <span class="va">self</span>.df[[<span class="st">&#39;id&#39;</span>, <span class="st">&#39;alpha&#39;</span>,<span class="st">&#39;beta&#39;</span>,<span class="st">&#39;exp&#39;</span>]].iloc[<span class="va">self</span>.df.index.get_indexer(sample_ids)] <span class="co">### this took some effort! </span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df[<span class="st">&#39;severity_mdr&#39;</span>] <span class="op">=</span> <span class="va">self</span>.df.<span class="bu">apply</span>( <span class="kw">lambda</span> x: np.random.beta( x[<span class="st">&#39;alpha&#39;</span>] , x[<span class="st">&#39;beta&#39;</span>]  ) , axis<span class="op">=</span><span class="dv">1</span> ) <span class="co">### use apply with axis =1 to use function on each row</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df[<span class="st">&#39;severity&#39;</span>] <span class="op">=</span> <span class="va">self</span>.df[<span class="st">&#39;severity_mdr&#39;</span>] <span class="op">*</span> <span class="va">self</span>.df[<span class="st">&#39;exp&#39;</span>] <span class="co">### this gives us severity for each event</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        year <span class="op">=</span> np.arange(<span class="dv">1</span>, sims <span class="op">+</span> <span class="dv">1</span>, <span class="dv">1</span>) <span class="co"># start (included): 0, stop (excluded): 10, step:1</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        all_years <span class="op">=</span> pd.DataFrame(year , columns<span class="op">=</span>[<span class="st">&#39;year&#39;</span>])</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df[<span class="st">&#39;year&#39;</span>] <span class="op">=</span> np.repeat(year, num_events)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df <span class="op">=</span> <span class="va">self</span>.df[[<span class="st">&#39;year&#39;</span>, <span class="st">&#39;severity&#39;</span>]]</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df <span class="op">=</span> pd.merge(<span class="va">self</span>.df, all_years, how<span class="op">=</span><span class="st">&#39;right&#39;</span>).fillna(<span class="dv">0</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> oep(<span class="va">self</span>):</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        rp <span class="op">=</span> pd.DataFrame([<span class="dv">10000</span>,<span class="dv">5000</span>,<span class="dv">1000</span>,<span class="dv">500</span>,<span class="dv">250</span>,<span class="dv">200</span>,<span class="dv">100</span>,<span class="dv">50</span>, <span class="dv">25</span>,<span class="dv">10</span>,<span class="dv">5</span>,<span class="dv">2</span>], columns<span class="op">=</span>[<span class="st">&#39;return_period&#39;</span>])</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>        rp[<span class="st">&#39;ntile&#39;</span>] <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> <span class="dv">1</span> <span class="op">/</span> rp[<span class="st">&#39;return_period&#39;</span>] </span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span>(<span class="va">self</span>.df.groupby([<span class="st">&#39;year&#39;</span>])[<span class="st">&#39;severity&#39;</span>].<span class="bu">max</span>().quantile(rp[<span class="st">&#39;ntile&#39;</span>]))</span></code></pre></div>
+</div>
+<p>Firstly I use numpy to set the random seed so that results are reproducible. (Note - would it make a difference inside the init function?)</p>
+<p>Next, I define a method generate_ylt which performs the simulation steps in part1 and returns the YLT containing a column with year and column with the loss amount.</p>
+<p>Lastly I define a method to calculate oep. For the purposes of this exercise I fixed the calculation of OEP at the specified return periods, but I could have passed an additional argument <code>rp</code> along with self to allow the return periods to be variable.</p>
+<h4 id="containg-the-modules-inside-a-package">Containg the modules inside a package</h4>
+<p>I can define these two classes as modules as elt.py and ylt.py and contain them in a package called elt_py. In order to read the folder as a package an empty .py file with <code>__init__.py</code> is also needed at the folder level.</p>
+<p>There are a few other things to take care of in order to distribute the code as a package but they are outside the scope of this post.</p>
+<p><img src="package.PNG" alt="snippet from VS code" /> Once I have create the package, I can import the classes from the elt_py package and the process generate a YLT is much simplified. I can generate the oep with just 8 lines of code and the ability to instantiate different instances of ELTs and YLTs make it easy to apply these classes to different ELTs</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> elt_py.elt <span class="im">import</span> Elt</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> elt_py.ylt <span class="im">import</span> Ylt</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.read_csv(<span class="st">&quot;example.csv&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>elt <span class="op">=</span> Elt(X)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>elt.parameterise()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>ylt <span class="op">=</span> Ylt(elt.df)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>ylt.generate_ylt(sims<span class="op">=</span><span class="dv">2000</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ylt.oep())</span></code></pre></div>
+<figure>
+<img src="jupyter.PNG" alt="snippet from VS code" /><figcaption aria-hidden="true">snippet from VS code</figcaption>
+</figure>
+<h4 id="summary">Summary</h4>
+<p>Creating classes and containing code in modules requires a good deal of extra work over writing an ad-hoc script. However by writing a class and housing the code into modules ( and a package), it makes it much easier to re-use and distribute the code.</p>
+<p>One of the other major benefits would be the ability to incorporate unit testing on the methods being created which I will cover in a future post in detail.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

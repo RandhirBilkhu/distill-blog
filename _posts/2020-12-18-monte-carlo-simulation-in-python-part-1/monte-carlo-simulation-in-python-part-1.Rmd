@@ -138,7 +138,7 @@ print(elt)
     10  7840.800000  0.000000  
     
 
-## Step 3 : Simulate Frequency of events by year
+### Step 3 : Simulate Frequency of events by year
 
 We can run the simulation over 100 years.  This parameter will need to be much higher in practice in order to provide a reasonable YLT.  Especially when using ELTS for Earthquake losses which have very low probabilities of occurence.
 
