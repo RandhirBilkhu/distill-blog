@@ -10,4 +10,4 @@ knitr::opts_chunk$set(echo = FALSE)
 
 I hope to use this blog as a tool for self learning and documentation as I try to expand my skills and knowledge of data science.
 
-I'm sure there will be many ways I can improve upon what I post here, and I would really welcome any feedback or suggestions. You can message me on [twitter](https://twitter.com/randhirbilkhu) , [linkedin](https://www.linkedin.com/in/rbilkhu/) or find me on [github](https://github.com/RandhirBilkhu)
+I'm sure there will be many ways I can improve upon what I post here, and I would really welcome any feedback or suggestions. You can message me on [Twitter](https://twitter.com/randhirbilkhu) , [Linkedin](https://www.linkedin.com/in/rbilkhu/) or find me on [Github](https://github.com/RandhirBilkhu)

@@ -5,15 +5,15 @@
       "title": "About",
       "description": "My personal blog about R, Python and data science",
       "author": [],
-      "contents": "\r\nI hope to use this blog as a tool for self learning and documentation as I try to expand my skills and knowledge of data science.\r\nI’m sure there will be many ways I can improve upon what I post here, and I would really welcome any feedback or suggestions. You can message me on twitter , linkedin or find me on github\r\n\r\n\r\n\r\n",
-      "last_modified": "2020-12-23T12:22:42+00:00"
+      "contents": "\r\nI hope to use this blog as a tool for self learning and documentation as I try to expand my skills and knowledge of data science.\r\nI’m sure there will be many ways I can improve upon what I post here, and I would really welcome any feedback or suggestions. You can message me on Twitter , Linkedin or find me on Github\r\n\r\n\r\n\r\n",
+      "last_modified": "2020-12-23T14:23:08+00:00"
     },
     {
       "path": "index.html",
       "title": "Posts",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2020-12-23T12:11:40+00:00"
+      "last_modified": "2020-12-23T14:18:16+00:00"
     }
   ],
   "collections": ["posts/posts.json"]
