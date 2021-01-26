@@ -21,7 +21,7 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-You can find eltr on [github](https://github.com/RandhirBilkhu/eltr)
+You can find eltr on CRAN or the development version on [github](https://github.com/RandhirBilkhu/eltr)
 
 My goal with this package is to create functions which are helpful to analysing Catastrophe model outputs particularly in a re-insurance context. 
 

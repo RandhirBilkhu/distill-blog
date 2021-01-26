@@ -83,9 +83,9 @@
       "actuarial",
       "catastrophe models"
     ],
-    "contents": "\r\nYou can find eltr on github\r\nMy goal with this package is to create functions which are helpful to analysing Catastrophe model outputs particularly in a re-insurance context.\r\nIntial documentation can be found here.\r\nThis first release is intended to be a foundation upon which to build. I have a pipeline of features to be added but would welcome ideas for development.\r\nPlease feel free to raise an issue here\r\nRelease Notes 0.1.0\r\ncreate_elt transforms a raw elt into a object with beta distribution parameters for secondary uncertainty\r\ncreate_ylt runs a monte carlo simulation assuming a poisson distribution for primary uncertainty\r\ncreate_oep_curve calculates exceedance probability and returns the occurrence loss at specified return periods\r\nlayer_loss calculates limited loss to layer\r\n\r\n\r\n\r\n",
+    "contents": "\r\nYou can find eltr on CRAN or the development version on github\r\nMy goal with this package is to create functions which are helpful to analysing Catastrophe model outputs particularly in a re-insurance context.\r\nIntial documentation can be found here.\r\nThis first release is intended to be a foundation upon which to build. I have a pipeline of features to be added but would welcome ideas for development.\r\nPlease feel free to raise an issue here\r\nRelease Notes 0.1.0\r\ncreate_elt transforms a raw elt into a object with beta distribution parameters for secondary uncertainty\r\ncreate_ylt runs a monte carlo simulation assuming a poisson distribution for primary uncertainty\r\ncreate_oep_curve calculates exceedance probability and returns the occurrence loss at specified return periods\r\nlayer_loss calculates limited loss to layer\r\n\r\n\r\n\r\n",
     "preview": "posts/2020-12-13-eltcat/hurr.jpg",
-    "last_modified": "2020-12-21T16:58:18+00:00",
-    "input_file": {}
+    "last_modified": "2021-01-26T21:09:31+00:00",
+    "input_file": "eltcat.utf8.md"
   }
 ]
